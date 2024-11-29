@@ -1,2 +1,5 @@
-# sse
-Simple implementation of Server-Sent Events in PHP
+Simple implementation of [Server-Sent Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events) in PHP.  
+Open stream with `\Simbiat\http\SSE:open()`. Optionally pass `true` to it, if you want to use a counter for event IDs (that is ID 1, ID 2, so on).  
+Close stream with `\Simbiat\http\SSE:close()`. Optionally pass `true` if you want to not only close the stream, but exit the script entirely.  
+To send a message to stream use `\Simbiat\http\SSE:send($message, $event, $retry, $id)`, where `$message` is a `string` containing the message of the event, `$event` is an optional `string` with event name, `$retry` is an optional `int` of milliseconds, used for a retry timer, in case of disconnect, and `$id` is an optional event ID. If `$id` is null or contains only whitespace, either a counter will be used (if `true` was passed to `open()`) or server's high resolution time.  
+Note that all new line symbols will will be removed from message, event and ID, and they also will be trimmed.

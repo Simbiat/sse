@@ -1,0 +1,33 @@
+{
+    "name": "simbiat/sse",
+    "type": "library",
+    "keywords": [
+        "server",
+        "side",
+        "events",
+        "sse"
+    ],
+    "description": "Cron utilizing a database to store tasks.",
+    "homepage": "https://github.com/Simbiat/sse",
+    "license": "AGPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Dmitry Kustov",
+            "email": "simbiat@outlook.com",
+            "homepage": "https://www.simbiat.dev",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Simbiat\\http\\": "src/"
+        }
+    },
+    "support": {
+        "issues": "https://github.com/Simbiat/sse/issues",
+        "source": "https://github.com/Simbiat/sse"
+    }
+}

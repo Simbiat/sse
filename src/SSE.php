@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Simbiat\http;
+namespace Simbiat\HTTP;
 
 /**
  * PSimple implementation of Server-Side Events

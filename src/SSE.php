@@ -27,7 +27,7 @@ class SSE
     
     /**
      * Check if SSE mode is possible
-     * @param bool $throw Whether to throw an exception, if it's not possible
+     * @param bool $throw Whether to throw an exception if it's not possible
      *
      * @return bool
      */
@@ -48,9 +48,9 @@ class SSE
                 return false;
             }
             foreach (headers_list() as $header) {
-                #Check if the header starts with 'Content-Type:'
+                #Check if the header starts with 'Content-Type'
                 if (0 === strncasecmp($header, 'Content-Type', 12)) {
-                    #Check if it is event stream
+                    #Check if it is an event stream
                     if (preg_match('/^Content-Type:\s*text\/event-stream/iu', $header) === 1) {
                         self::$SSEPossible = true;
                         return self::$SSEPossible;
@@ -83,7 +83,7 @@ class SSE
         if (!self::$SSE) {
             header('Content-Type: text/event-stream');
             header('Transfer-Encoding: chunked');
-            #Forbid caching, since stream is not supposed to be cached
+            #Forbid caching, since the stream is not supposed to be cached
             header('Cache-Control: no-cache');
             self::$SSE = true;
         }
@@ -111,7 +111,7 @@ class SSE
      * @param string      $message Actual message text
      * @param string      $event   Optional event name
      * @param int         $retry   Time in milliseconds after which to reconnect to stream, in case of connection loss
-     * @param string|null $id      Event ID. If null will be either a counter (if stream opened with `$counterAsId` set to `true`) or high resolution time of the server
+     * @param string|null $id      Event ID. If null will be either a counter (if the stream opened with `$counterAsId` set to `true`) or high resolution time of the server
      *
      * @return void
      */

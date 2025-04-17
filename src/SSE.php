@@ -102,7 +102,7 @@ class SSE
         /** @noinspection PhpUsageOfSilenceOperatorInspection */
         @header('Connection: close');
         if ($completely) {
-            exit;
+            exit(0);
         }
     }
     

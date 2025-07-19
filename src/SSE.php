@@ -33,25 +33,25 @@ class SSE
      */
     public static function isPossible(bool $throw = false): bool
     {
-        if (headers_sent()) {
+        if (\headers_sent()) {
             if ($throw) {
                 throw new \RuntimeException('Headers already sent, can\'t enable SSE mode');
             }
             return false;
         }
         if (!self::$sse_possible && !self::$sse) {
-            if (preg_match('/^cli(-server)?$/i', PHP_SAPI) === 1) {
+            if (\preg_match('/^cli(-server)?$/i', \PHP_SAPI) === 1) {
                 #SSE is not possible in CLI mode
                 if ($throw) {
                     throw new \RuntimeException('SSE is not possible in CLI mode');
                 }
                 return false;
             }
-            foreach (headers_list() as $header) {
+            foreach (\headers_list() as $header) {
                 #Check if the header starts with 'Content-Type'
-                if (0 === strncasecmp($header, 'Content-Type', 12)) {
+                if (0 === \strncasecmp($header, 'Content-Type', 12)) {
                     #Check if it is an event stream
-                    if (preg_match('/^Content-Type:\s*text\/event-stream/iu', $header) === 1) {
+                    if (\preg_match('/^Content-Type:\s*text\/event-stream/iu', $header) === 1) {
                         self::$sse_possible = true;
                         return self::$sse_possible;
                     }
@@ -78,13 +78,13 @@ class SSE
         self::$counter = 0;
         self::$counter_as_id = $counter_as_id;
         #Ignore user abort, since this is handled in another place
-        ignore_user_abort(true);
+        \ignore_user_abort(true);
         self::isPossible(true);
         if (!self::$sse) {
-            header('Content-Type: text/event-stream');
-            header('Transfer-Encoding: chunked');
+            \header('Content-Type: text/event-stream');
+            \header('Transfer-Encoding: chunked');
             #Forbid caching, since the stream is not supposed to be cached
-            header('Cache-Control: no-cache');
+            \header('Cache-Control: no-cache');
             self::$sse = true;
         }
     }
@@ -100,7 +100,7 @@ class SSE
     {
         # Suppress the silence operator inspection. While normally we can use `headers_sent` to check if headers were sent, with a stream it does not really make sense
         /** @noinspection PhpUsageOfSilenceOperatorInspection */
-        @header('Connection: close');
+        @\header('Connection: close');
         if ($completely) {
             exit(0);
         }
@@ -117,20 +117,20 @@ class SSE
      */
     public static function send(string $message, string $event = '', int $retry = 10000, ?string $id = null): void
     {
-        if ($id === null || preg_match('/^\s*$/u', $id) === 1) {
+        if ($id === null || \preg_match('/^\s*$/u', $id) === 1) {
             if (self::$counter_as_id) {
                 $id = (string)self::$counter++;
             } else {
-                $id = (string)hrtime(true);
+                $id = (string)\hrtime(true);
             }
         } else {
-            $id = mb_trim(preg_replace('/[\r\n]/u', '', $message), null, 'UTF-8');
+            $id = mb_trim(\preg_replace('/[\r\n]/u', '', $message), null, 'UTF-8');
         }
         #Text fields should not have any new lines in them, so strip them
-        $event = mb_trim(preg_replace('/[\r\n]/u', '', $event), null, 'UTF-8');
-        $message = mb_trim(preg_replace('/[\r\n]/u', '', $message), null, 'UTF-8');
+        $event = mb_trim(\preg_replace('/[\r\n]/u', '', $event), null, 'UTF-8');
+        $message = mb_trim(\preg_replace('/[\r\n]/u', '', $message), null, 'UTF-8');
         echo 'retry: '.$retry."\n".'id: '.$id."\n".(empty($event) ? '' : 'event: '.$event."\n").'data: '.$message."\n\n";
-        ob_flush();
-        flush();
+        \ob_flush();
+        \flush();
     }
 }

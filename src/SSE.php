@@ -19,11 +19,11 @@ class SSE
     /**
      * @var bool Flag indicating if SSE mode is possible or not
      */
-    public static bool $sse_possible = false;
+    private(set) static bool $sse_possible = false;
     /**
      * @var bool Flag indicating if SSE mode is enabled or not
      */
-    public static bool $sse = false;
+    private(set) static bool $sse = false;
     
     /**
      * Check if SSE mode is possible

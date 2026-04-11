@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace Simbiat\HTTP;
 
+use Simbiat\StringHelpers\Sanitize;
+
 /**
  * Simple implementation of Server-Sent Events
  */
@@ -117,7 +119,7 @@ class SSE
      */
     public static function send(string $message, string $event = '', int $retry = 10000, ?string $id = null): void
     {
-        if ($id === null || \preg_match('/^\s*$/u', $id) === 1) {
+        if ($id === null || Sanitize::whiteString($id)) {
             if (self::$counter_as_id) {
                 $id = (string)self::$counter++;
             } else {

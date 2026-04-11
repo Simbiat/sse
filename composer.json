@@ -19,7 +19,8 @@
         }
     ],
     "require": {
-        "php": "^8.5"
+        "php": "^8.5",
+        "simbiat/stringhelpers": "^2.0"
     },
     "autoload": {
         "psr-4": {

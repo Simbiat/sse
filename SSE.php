@@ -122,16 +122,16 @@ class SSE
     {
         if ($id === null || Sanitize::whiteString($id)) {
             if (self::$counter_as_id) {
-                $id = (string)self::$counter++;
+                $id = (string) self::$counter++;
             } else {
-                $id = (string)\hrtime(true);
+                $id = (string) \hrtime(true);
             }
         } else {
-            $id = mb_trim(\preg_replace('/[\r\n]/u', '', $message), null, 'UTF-8');
+            $id = \mb_trim(\preg_replace('/[\r\n]/u', '', $message), null, 'UTF-8');
         }
         // Text fields should not have any new lines in them, so strip them
-        $event = mb_trim(\preg_replace('/[\r\n]/u', '', $event), null, 'UTF-8');
-        $message = mb_trim(\preg_replace('/[\r\n]/u', '', $message), null, 'UTF-8');
+        $event = \mb_trim(\preg_replace('/[\r\n]/u', '', $event), null, 'UTF-8');
+        $message = \mb_trim(\preg_replace('/[\r\n]/u', '', $message), null, 'UTF-8');
         echo 'retry: '.$retry."\n".'id: '.$id."\n".(empty($event) ? '' : 'event: '.$event."\n").'data: '.$message."\n\n";
         \ob_flush();
         \flush();

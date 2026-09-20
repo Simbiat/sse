@@ -30,6 +30,7 @@ class SSE
 
     /**
      * Check if SSE mode is possible
+     *
      * @param bool $throw Whether to throw an exception if it's not possible
      *
      * @return bool
@@ -40,14 +41,19 @@ class SSE
             if ($throw) {
                 throw new \RuntimeException('Headers already sent, can\'t enable SSE mode');
             }
+
             return false;
         }
-        if (!self::$sse_possible && !self::$sse) {
+        if (
+            !self::$sse_possible
+            && !self::$sse
+        ) {
             if (\preg_match('/^cli(-server)?$/i', \PHP_SAPI) === 1) {
                 // SSE is not possible in CLI mode
                 if ($throw) {
                     throw new \RuntimeException('SSE is not possible in CLI mode');
                 }
+
                 return false;
             }
             foreach (\headers_list() as $header) {
@@ -56,16 +62,19 @@ class SSE
                     // Check if it is an event stream
                     if (\preg_match('/^Content-Type:\s*text\/event-stream/iu', $header) === 1) {
                         self::$sse_possible = true;
+
                         return self::$sse_possible;
                     }
                     if ($throw) {
                         throw new \RuntimeException('`Content-Type` header has already been sent and is not `event-stream`');
                     }
+
                     return false;
                 }
             }
             self::$sse_possible = true;
         }
+
         return self::$sse_possible;
     }
 
@@ -111,6 +120,7 @@ class SSE
 
     /**
      * Send server event to stream
+     *
      * @param string      $message Actual message text
      * @param string      $event   Optional event name
      * @param int         $retry   Time in milliseconds after which to reconnect to stream, in case of connection loss
@@ -120,7 +130,10 @@ class SSE
      */
     public static function send(string $message, string $event = '', int $retry = 10000, ?string $id = null): void
     {
-        if ($id === null || Sanitize::whiteString($id)) {
+        if (
+            $id === null
+            || Sanitize::whiteString($id)
+        ) {
             if (self::$counter_as_id) {
                 $id = (string) self::$counter++;
             } else {

@@ -42,11 +42,12 @@ final class SSE
     {
         if (\headers_sent()) {
             if ($throw) {
-                throw new \RuntimeException('Headers already sent, can\'t enable SSE mode');
+                throw new \RuntimeException("Headers already sent, can't enable SSE mode");
             }
 
             return false;
         }
+
         if (
             !self::$sse_possible
             && !self::$sse
@@ -59,6 +60,7 @@ final class SSE
 
                 return false;
             }
+
             foreach (\headers_list() as $header) {
                 // Check if the header starts with 'Content-Type'
                 if (\strncasecmp($header, 'Content-Type', 12) === 0) {
@@ -68,6 +70,7 @@ final class SSE
 
                         return self::$sse_possible;
                     }
+
                     if ($throw) {
                         throw new \RuntimeException('`Content-Type` header has already been sent and is not `event-stream`');
                     }
@@ -75,6 +78,7 @@ final class SSE
                     return false;
                 }
             }
+
             self::$sse_possible = true;
         }
 
@@ -93,8 +97,8 @@ final class SSE
         self::$counter = 0;
         self::$counter_as_id = $counter_as_id;
         // Ignore user abort, since this is handled in another place
-        \ignore_user_abort(true);
-        self::isPossible(true);
+        \ignore_user_abort(enable: true);
+        self::isPossible(throw: true);
         if (self::$sse) {
             return;
         }
@@ -141,13 +145,14 @@ final class SSE
         ) {
             $id = self::$counter_as_id
                 ? (string) self::$counter++
-                : (string) \hrtime(true);
+                : (string) \hrtime(as_number: true);
         } else {
-            $id = \mb_trim(\preg_replace('/[\r\n]/u', '', $message), null, 'UTF-8');
+            $id = \mb_trim(\preg_replace('/[\r\n]/u', '', $message), encoding: 'UTF-8');
         }
+
         // Text fields should not have any new lines in them, so strip them
-        $event = \mb_trim(\preg_replace('/[\r\n]/u', '', $event), null, 'UTF-8');
-        $message = \mb_trim(\preg_replace('/[\r\n]/u', '', $message), null, 'UTF-8');
+        $event = \mb_trim(\preg_replace('/[\r\n]/u', '', $event), encoding: 'UTF-8');
+        $message = \mb_trim(\preg_replace('/[\r\n]/u', '', $message), encoding: 'UTF-8');
         echo 'retry: '.$retry."\n".'id: '.$id."\n".(empty($event) ? '' : 'event: '.$event."\n").'data: '.$message."\n\n";
         \ob_flush();
         \flush();

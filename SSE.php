@@ -119,8 +119,7 @@ final class SSE
      */
     public static function close(bool $completely = false): void
     {
-        // Suppress the silence operator inspection. While normally we can use `headers_sent` to check if headers were sent, with a stream it does not really make sense
-        /* @noinspection PhpUsageOfSilenceOperatorInspection */
+        /* @noinspection PhpUsageOfSilenceOperatorInspection -- While normally we can use `headers_sent` to check if headers were sent, with a stream it does not really make sense*/
         @\header('Connection: close');
         if ($completely) {
             exit(0);
